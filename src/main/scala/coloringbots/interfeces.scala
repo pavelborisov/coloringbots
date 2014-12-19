@@ -1,3 +1,5 @@
+package coloringbots
+
 /**
  * Created by IntelliJ IDEA.
  * User: Andrew F. Podkolzin
