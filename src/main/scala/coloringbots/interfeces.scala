@@ -9,7 +9,7 @@ package coloringbots
  *
  */
 
-class Coord(val x: Int, val y: Int) {
+case class Coord(x: Int, y: Int) {
   override def toString = s"{$x,$y}"
   override def hashCode(): Int = x.hashCode() * 1000 + y.hashCode()
   override def equals(obj: scala.Any): Boolean = obj.isInstanceOf[Coord] && x == obj.asInstanceOf[Coord].x && y == obj.asInstanceOf[Coord].y
