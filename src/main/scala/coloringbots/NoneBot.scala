@@ -11,7 +11,8 @@ package coloringbots
 class NoneBot extends Bot{
 //  override def action: Option[] = Option(new Coord (1,2))
 
-  override def action = field.get(new Coord (1,2))
+
+  override def nextTurn = this -> field.get(Coord (1,2)).get
 
   override def notify(cell: Cell) = {}
 
