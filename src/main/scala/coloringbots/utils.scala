@@ -12,20 +12,25 @@ import scala.util.Try
  */
 
 /* Данный объект потребовался для поддержки синтаксиса, используетмого в объекте Round */
-case class TurnMaker(bot: Option[Bot]) {
+case class TurnMaker(bot: Option[Bot], cell: Option[Cell]) {
   /**
    * Получаем ход, валидируем его и выполняем и возвращаем пустой TurnMaker.
    * Если была ошибка - возвращаем TurnMaker с установленым ботом  */
   def paint(turn: (Bot)=> Turn): TurnMaker = this take turn map validate map perform getOrElse bad
 
   /* Если результатом paint возвращен TurnMaker с ботом - выполняем alternative, иначе ничего не делаем  */
-  def or(alternative: Bot => Unit) = bot foreach alternative
+  def or(alternative: Bot => Unit): TurnMaker = { bot foreach alternative; this }
+  def next(optional: (Cell) => Unit): TurnMaker = {cell foreach optional; this}
 
   private def take(turn: (Bot)=> Turn): Try[Turn] = Try(bot map turn get)
   private def validate(turn: Turn): Turn = if (turn.validate) turn else exception
-  private def perform(turn: Turn): TurnMaker = {turn.cell.asInstanceOf[CellImpl].set(turn.bot); TurnMaker(None)}
+  private def perform(turn: Turn): TurnMaker = {
+    val cell: CellImpl = turn.cell.asInstanceOf[CellImpl]
+    cell.set(turn.bot)
+    TurnMaker(None, Some(cell))
+  }
+  private def bad: TurnMaker = TurnMaker(bot, None)
   private def exception = throw new IllegalStateException("Некорректный ход у бота " + bot)
-  private def bad: TurnMaker = this
 }
 
 /**
@@ -43,7 +48,7 @@ class Bots{
   def players: Seq[Bot] = bots filter isActive toSeq
   def all: Seq[Bot] = bots toSeq
   def foreach(turn: (Bot) => Unit) = players foreach turn
-
+  def forall(turn: (Bot) => Unit)  = all foreach turn
 }
 
 /* Данный объект создан для поддержки синтаксиса, используемого в методе CellImpl.neighbours */
@@ -55,7 +60,7 @@ case class Neighbours(private val set: Set[Cell]){
 /* неявные преобразования */
 object Utils {
   implicit def bots2Round(bots: Bots): Round = new Round(bots)
-  implicit def bot2TurnMaker(bot: Bot):TurnMaker = TurnMaker(Some(bot))
+  implicit def bot2TurnMaker(bot: Bot):TurnMaker = TurnMaker(Some(bot), None)
   implicit def option2Cell(o: Option[Cell]): Cell = o.get
   implicit def neighbours2Set(n: Neighbours): Set[Cell] = n.toSet
   implicit def tuple2Coord(t: (Int, Int)): Coord = Coord(t._1, t._2)

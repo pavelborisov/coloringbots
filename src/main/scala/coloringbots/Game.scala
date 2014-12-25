@@ -34,27 +34,24 @@ case class CellImpl (override val coord: Coord, override val field: Field) exten
 case class FieldImpl(override val size: Coord) extends Field{
   override val cells = Array.ofDim[Cell](size.x, size.y)
   override def get(coord: Coord): Option[Cell] = Try(cells(coord.x)(coord.y)).toOption
-
-  def put(cell: CellImpl, bot: Bot): Boolean = {cell.set(bot)}
 }
 
 /* Объект Раунд */
-//todo call notify
 class Round(val bots: Bots){
   /* Делает ходы всех ботов по разу */
   def run(i: Int)    = bots foreach turn
   /* Выполняет ход бота. Если ход с ошибкой или некорректный - дисквалификация бота */
   def turn(bot: Bot) = {
-//    this validate bot nextTurn
-//    new TurnM(bot)
     // вся красивость реализована в объекте TurnMaker
-    bot paint cell or disqualify
+    bot paint cell or disqualify next notify
+
   }
 
   /* Дисквалификация бота */
   private def disqualify(bot: Bot) = {bots disqualify bot; None}
   /* Ячейка представляется объектом ход */
   private def cell(bot: Bot): Turn = bot.nextTurn
+  private def notify(cell: Cell): Unit = bots.forall(_.notify(cell))
 }
 
 /**
