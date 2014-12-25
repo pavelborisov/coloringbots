@@ -8,6 +8,6 @@ package coloringbots
 object Launcher {
   def main(args: Array[String]): Unit = {
     //TODO: make it run
-    new Manager(new Coord(10, 10), 5).add(new NoneBot).execute
+    Game(Coord(10, 10), 5).register(new NoneBot).play
   }
 }
