@@ -11,12 +11,8 @@ import Utils._
  * Since: 
  *
  */
-/*
-object CellImpl{
 
-}
- */
-
+/* Реализация ячейки */
 case class CellImpl (override val coord: Coord, override val field: Field) extends Cell{
   protected var bot: Option[Bot] = None
 
@@ -30,11 +26,11 @@ case class CellImpl (override val coord: Coord, override val field: Field) exten
   override def up    = get(x    , y - 1)
   override def down  = get(x    , y + 1)
   override def neighbours: Set[Cell] = N + up.left + up + up.right + left + right + down.left + down + down.right
-  override def isEmpty: Boolean = whose.isEmpty
 
-  def set(bot: Bot): Boolean = { this.bot = Option(bot); println(s"$coord marked ${bot.color}"); true }
+  def set(bot: Bot): Boolean = { this.bot = Some(bot); println(s"$coord marked ${bot.color}"); true }
 }
 
+/* Реализация поля */
 case class FieldImpl(override val size: Coord) extends Field{
   override val cells = Array.ofDim[Cell](size.x, size.y)
   override def get(coord: Coord): Option[Cell] = Try(cells(coord.x)(coord.y)).toOption
@@ -42,11 +38,17 @@ case class FieldImpl(override val size: Coord) extends Field{
   def put(cell: CellImpl, bot: Bot): Boolean = {cell.set(bot)}
 }
 
+/* Объект Раунд */
+//todo call notify
 class Round(val bots: Bots){
+  /* Делает ходы всех ботов по разу */
   def run(i: Int)    = bots foreach turn
+  /* Выполняет ход бота. Если ход с ошибкой или некорректный - дисквалификация бота */
   def turn(bot: Bot) = bot paint cell or disqualify
 
+  /* Дисквалификация бота */
   private def disqualify(bot: Bot) = {bots disqualify bot; None}
+  /* Ячейка представляется объектом ход */
   private def cell(bot: Bot): Turn = bot.nextTurn
 
   def turn2(bot: Bot) = this paint bot map validate map make getOrElse disqualify(bot)
@@ -55,17 +57,25 @@ class Round(val bots: Bots){
   private def paint(bot: Bot) = Try(bot nextTurn)
 }
 
+/**
+ * Объект Игра
+ * @param size   - размер поля
+ * @param rounds - количество раундов
+ */
 case class Game (size: Coord, rounds: Int) {
   private val field = FieldImpl(size)
   private val bots = new Bots
 
+  /* регистрация бота */
   def register(bot: Bot) = { bots register bot; bot.field = field; this }
 
+  /* запуск игры */
   def play = {
     0 until rounds foreach round
     this
   }
 
+  /* Выполняет i-й раунд */
   private def round(i: Int) = {
     bots run i
   }
