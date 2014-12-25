@@ -44,17 +44,17 @@ class Round(val bots: Bots){
   /* Делает ходы всех ботов по разу */
   def run(i: Int)    = bots foreach turn
   /* Выполняет ход бота. Если ход с ошибкой или некорректный - дисквалификация бота */
-  def turn(bot: Bot) = bot paint cell or disqualify
+  def turn(bot: Bot) = {
+//    this validate bot nextTurn
+//    new TurnM(bot)
+    // вся красивость реализована в объекте TurnMaker
+    bot paint cell or disqualify
+  }
 
   /* Дисквалификация бота */
   private def disqualify(bot: Bot) = {bots disqualify bot; None}
   /* Ячейка представляется объектом ход */
   private def cell(bot: Bot): Turn = bot.nextTurn
-
-  def turn2(bot: Bot) = this paint bot map validate map make getOrElse disqualify(bot)
-  private def validate(turn: Turn) = if (turn.validate) turn else throw new IllegalStateException("Некорректный ход у бота " + turn.bot)
-  private def make(turn: Turn) = turn.cell.asInstanceOf[CellImpl].set(turn.bot)
-  private def paint(bot: Bot) = Try(bot nextTurn)
 }
 
 /**
