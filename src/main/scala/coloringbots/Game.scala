@@ -32,7 +32,7 @@ case class CellImpl (override val coord: Coord, override val field: Field) exten
 
 /* Реализация поля */
 case class FieldImpl(override val size: Coord) extends Field{
-  override val cells = Array.ofDim[Cell](size.x, size.y)
+  override val cells = Array.ofDim[Cell](size.x + 1, size.y + 1)
   override def get(coord: Coord): Option[Cell] = Try(cells(coord.x)(coord.y)).toOption
 }
 
@@ -43,7 +43,7 @@ class Round(val bots: Bots){
   /* Выполняет ход бота. Если ход с ошибкой или некорректный - дисквалификация бота */
   def turn(bot: Bot) = {
     // вся красивость реализована в объекте TurnMaker
-    bot paint cell or disqualify next notify
+    bot paint cell send notify or disqualify
 
   }
 
@@ -59,6 +59,7 @@ class Round(val bots: Bots){
  * @param size   - размер поля
  * @param rounds - количество раундов
  */
+//todo define a winner
 case class Game (size: Coord, rounds: Int) {
   private val field = FieldImpl(size)
   private val bots = new Bots

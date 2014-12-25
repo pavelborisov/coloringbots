@@ -19,8 +19,8 @@ case class TurnMaker(bot: Option[Bot], cell: Option[Cell]) {
   def paint(turn: (Bot)=> Turn): TurnMaker = this take turn map validate map perform getOrElse bad
 
   /* Если результатом paint возвращен TurnMaker с ботом - выполняем alternative, иначе ничего не делаем  */
-  def or(alternative: Bot => Unit): TurnMaker = { bot foreach alternative; this }
-  def next(optional: (Cell) => Unit): TurnMaker = {cell foreach optional; this}
+  def or(alternative: Bot => Unit):   TurnMaker = { bot  foreach alternative; this }
+  def send(optional: (Cell) => Unit): TurnMaker = { cell foreach optional;    this}
 
   private def take(turn: (Bot)=> Turn): Try[Turn] = Try(bot map turn get)
   private def validate(turn: Turn): Turn = if (turn.validate) turn else exception
