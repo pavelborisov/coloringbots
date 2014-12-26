@@ -63,6 +63,7 @@ trait Bot{
   def notify(cell: Cell): Unit
 
   protected def ->(cell: Cell): Turn = Turn(this, cell)
+  implicit def tuple2coord(tuple: (Int, Int)): Cell = field.get(Coord(tuple._1, tuple._2)).get
 }
 
 /* объект Ход, определяется намерениями бота @param bot закрасить ячейку cell */

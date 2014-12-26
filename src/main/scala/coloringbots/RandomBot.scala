@@ -11,25 +11,17 @@ import scala.util.Random
  *
  */
 class RandomBot extends Bot{
-//  override def action: Option[] = Option(new Coord (1,2))
-  implicit def tuple2coord(tuple: (Int, Int)): Cell = field.get(Coord(tuple._1, tuple._2)).get
   val random = new Random
 
   //todo
-  override def nextTurn: Turn = {
-    for (i <- 1 until 20) {
-      def turn = this -> (x,y)
-      if ( turn.validate) return turn
-    }
-    this -> (x,y)
-  }
+  override def nextTurn: Turn = 1 to 20 map turn find validate getOrElse turn(21)
 
   override def notify(cell: Cell) = {}
-
-  override def color: String = "None"
-
+  override def color: String = "Random"
   override var field: Field = null
 
   private def x = random.nextInt(field.size.x)
   private def y = random.nextInt(field.size.y)
+  private def validate(turn: Turn) = turn.validate
+  private def turn(i: Int): Turn = this -> (x, y)
 }

@@ -1,5 +1,7 @@
 package coloringbots
 
+import scala.collection.immutable.IndexedSeq
+
 /**
  * Created by IntelliJ IDEA.
  * User: Andrew F. Podkolzin
@@ -15,8 +17,12 @@ class PrintingBot extends Bot
   override def color: String = "None"
   override var field: Field = null
 
-  def print(field: Field) = {
-
+  private def print(field: Field): Unit = {
+    (0 to field.size.y).reverse.foreach{y=>
+      (0 to field.size.x).map(x => (x, y).whose).foreach(print)
+      println()
+    }
   }
 
+  private def print(bot: Option[Bot]): Unit = Predef.print(bot.map(_.color).getOrElse(" "))
 }

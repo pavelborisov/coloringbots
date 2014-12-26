@@ -69,7 +69,7 @@ case class Game (size: Coord, rounds: Int) {
 
   /* запуск игры */
   def play = {
-    0 until rounds foreach round
+    1 to rounds foreach round
     this
   }
 
