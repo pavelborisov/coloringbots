@@ -10,6 +10,6 @@ object Launcher extends App{
     .register(RandomBot("blue"))
     .register(RandomBot("red"))
     .register(RandomBot("green"))
-    .register(RandomBot("yellow"))
+    .register(SeqBot("yellow"))
     .register(new PrintingBot).play
 }

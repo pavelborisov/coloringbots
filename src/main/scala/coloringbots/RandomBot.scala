@@ -14,7 +14,7 @@ case class RandomBot(val color: String) extends Bot{
   val random = new Random
 
   //todo
-  override def nextTurn: Turn = 1 to 100 map turn find validate getOrElse turn(21)
+  override def nextTurn: Turn = 1 to 20 map turn find validate getOrElse turn(21)
 
   override def notify(cell: Cell) = {}
   override var field: Field = null

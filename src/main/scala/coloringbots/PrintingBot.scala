@@ -24,5 +24,5 @@ class PrintingBot extends Bot
     }
   }
 
-  private def print(bot: Option[Bot]): Unit = Predef.print(bot.map(_.color(0)).getOrElse("_"))
+  private def print(bot: Option[Bot]): Unit = Predef.print(bot.map(_.color(0)).getOrElse("_") + "\t")
 }
