@@ -64,6 +64,8 @@ trait Bot{
 
   protected def ->(cell: Cell): Turn = Turn(this, cell)
   implicit def tuple2coord(tuple: (Int, Int)): Cell = field.get(Coord(tuple._1, tuple._2)).get
+
+  override def toString: String = s"$color bot"
 }
 
 /* объект Ход, определяется намерениями бота @param bot закрасить ячейку cell */
@@ -78,5 +80,7 @@ case class Turn(bot: Bot, cell: Cell){
   protected def canFill: Boolean = isBlank && cell.neighbours.count( _.whose.contains(bot)) > 1
   /* есть как минимум 3х соседних своих ячеек  */
   protected def canOver: Boolean = cell.neighbours.count( _.whose.contains(bot)) > 2
+
+  override def toString: String = s"$bot -> (${cell.coord.x}, ${cell.coord.y}})"
 }
 

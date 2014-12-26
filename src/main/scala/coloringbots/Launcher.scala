@@ -5,9 +5,11 @@ package coloringbots
  * Date: 19.12.14
  * Time: 16:29
  */
-object Launcher {
-  def main(args: Array[String]): Unit = {
-    //TODO: make it run
-    Game(Coord(10, 10), 5).register(new RandomBot).register(new PrintingBot).play
-  }
+object Launcher extends App{
+  Game(Coord(5, 6), 10)
+    .register(RandomBot("blue"))
+    .register(RandomBot("red"))
+    .register(RandomBot("green"))
+    .register(RandomBot("yellow"))
+    .register(new PrintingBot).play
 }

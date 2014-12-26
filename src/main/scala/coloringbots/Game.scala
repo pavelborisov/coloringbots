@@ -32,8 +32,15 @@ case class CellImpl (override val coord: Coord, override val field: Field) exten
 
 /* Реализация поля */
 case class FieldImpl(override val size: Coord) extends Field{
-  override val cells = Array.ofDim[Cell](size.x + 1, size.y + 1)
-  override def get(coord: Coord): Option[Cell] = Try(cells(coord.x)(coord.y)).toOption
+  override val cells:Array[Array[Cell]] = Array.ofDim[Cell](size.x + 1, size.y + 1)
+  override def get(coord: Coord): Option[Cell] = Try(this getOrNew coord).toOption
+
+  private def getOrNew(coord: Coord): Cell = Option(this cell coord).getOrElse{
+    cells(coord.x)(coord.y) = CellImpl(coord,this)
+    this cell coord
+  }
+  private def cell(coord: Coord): Cell = cells(coord.x)(coord.y)
+
 }
 
 /* Объект Раунд */
@@ -75,6 +82,8 @@ case class Game (size: Coord, rounds: Int) {
 
   /* Выполняет i-й раунд */
   private def round(i: Int) = {
+    println(s"round $i")
+    println(s"${bots.players} are ready to fight")
     bots run i
   }
 }

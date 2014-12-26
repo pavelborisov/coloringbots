@@ -14,7 +14,7 @@ class PrintingBot extends Bot
 {
   override def notify(cell: Cell): Unit = this print field
   override def nextTurn: Turn = throw new UnsupportedOperationException()
-  override def color: String = "None"
+  override def color: String = "printer"
   override var field: Field = null
 
   private def print(field: Field): Unit = {
@@ -24,5 +24,5 @@ class PrintingBot extends Bot
     }
   }
 
-  private def print(bot: Option[Bot]): Unit = Predef.print(bot.map(_.color).getOrElse(" "))
+  private def print(bot: Option[Bot]): Unit = Predef.print(bot.map(_.color(0)).getOrElse("_"))
 }
