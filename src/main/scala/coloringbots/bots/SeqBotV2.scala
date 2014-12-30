@@ -18,7 +18,7 @@ import scala.util.Random
 case class SeqBotV2(val color: String) extends Bot{
 
   val random = new Random
-  var cellMove = new collection.mutable.ArrayStack[Cell]()
+  var cellMove = new collection.mutable.ArrayStack[Cell]
 
   lazy val init = {
     var x:Int = 0
@@ -32,37 +32,63 @@ case class SeqBotV2(val color: String) extends Bot{
     cellMove.push( field.get( Coord(x,y) ).get )
   }
 
-  type cellop = ()=>Option[Cell]
-  def cells(cell:Cell):List[cellop] = {
-    val c = cell.coord
+  type cellop = (Coord)=>(Int,Int)
+  val cells:List[cellop] = {
     List[cellop](
-      { () => cell.up },
-      { () => cell.down },
-      { () => cell.right },
-      { () => cell.left },
-      { () => field.get( Coord(c.x+1,c.y+1) ) },
-      { () => field.get( Coord(c.x+1,c.y-1) ) },
-      { () => field.get( Coord(c.x-1,c.y+1) ) },
-      { () => field.get( Coord(c.x-1,c.y-1) ) })
+/*      { c:Coord => ( c.x + 2, c.y + 1) },
+      { c:Coord => ( c.x + 2, c.y) },
+      { c:Coord => ( c.x + 2, c.y - 1) },
+      { c:Coord => ( c.x - 2, c.y + 1) },
+      { c:Coord => ( c.x - 2, c.y) },
+      { c:Coord => ( c.x - 2, c.y - 1) },
+*/
+      { c:Coord => ( c.x + 1, c.y + 1) },
+      { c:Coord => ( c.x - 1, c.y + 1) },
+      { c:Coord => ( c.x + 1, c.y - 1) },
+      { c:Coord => ( c.x - 1, c.y - 1) },
+      { c:Coord => ( c.x + 1, c.y ) },
+      { c:Coord => ( c.x - 1, c.y ) },
+      { c:Coord => ( c.x, c.y + 1 ) },
+      { c:Coord => ( c.x, c.y - 1) })
   }
+
+  val cash:collection.mutable.HashSet[Int] = collection.mutable.HashSet.empty[Int]
 
   override def nextTurn: Turn = {
     init
 
-    cellMove.foreach ( cells(_).foreach { fcell =>
-    //cellMove.foreach { last_cell =>
-    //  last_cell.neighbours.foreach { cell =>
-        val cellopt = fcell()
-        if( !cellopt.isEmpty ) {
-          val cell = cellopt.get
-          val turn = Turn(this, cell)
-          if (turn.validate) {
-            cellMove.push(cell)
-            return turn
-          }
+    cash.clear()
+
+    cellMove.foreach { last_cell =>
+      cash.add { last_cell.coord.x * 1000 + last_cell.coord.y }
+
+      cells.foreach { coord =>
+         val (x,y) = coord( last_cell.coord );
+         val key = { x * 1000 + y  }
+         if( !cash.contains(key) &&
+           x > 0 && x < field.size.x &&
+           y > 0 && y < field.size.y )
+         {
+           val cell = field.get(Coord(x, y)).get
+           val turn = Turn(this, cell)
+           if (turn.validate) {
+             cellMove.push(cell)
+             return turn
+           }
         }
-      } )
-    //}
+        else
+          cash.add(key)
+      }
+    }
+
+    // check another move
+    (0 to field.size.y).foreach {y=>
+      (0 to field.size.x).foreach{ x =>
+        val t: Turn = this ->(x, y)
+        if (t.validate)
+          return t
+      }
+    }
 
     throw new Exception("No more turn!!!")
   }
