@@ -10,7 +10,7 @@ import scala.collection.immutable.IndexedSeq
  * Since: 
  *
  */
-class PrintingBot extends Bot
+object PrintZombi extends Bot
 {
   override def notify(cell: Cell): Unit = this print cell
   override def nextTurn: Turn = throw new UnsupportedOperationException()
