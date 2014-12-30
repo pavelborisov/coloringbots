@@ -23,7 +23,7 @@ case class TurnMaker(bot: Option[Bot], cell: Option[Cell]) {
   def or(alternative: Bot => Unit):   TurnMaker = { bot  foreach alternative; this }
   def send(optional: (Cell) => Unit): TurnMaker = { cell foreach optional;    this}
 
-  private def take(turn: (Bot)=> Turn): Try[Turn] = time { Try(bot map turn get) }
+  private def take(turn: (Bot)=> Turn): Try[Turn] = Try(bot map turn get)
   private def validate(turn: Turn): Turn = if (turn.validate) turn else exception
   private def perform(turn: Turn): TurnMaker = {
     val cell: CellImpl = turn.cell.asInstanceOf[CellImpl]
@@ -32,13 +32,6 @@ case class TurnMaker(bot: Option[Bot], cell: Option[Cell]) {
   }
   private def bad: TurnMaker = TurnMaker(bot, None)
   private def exception = throw new IllegalStateException("Некорректный ход у бота " + bot)
-
-  def time[A](f: => A) = {
-    val s = System.nanoTime
-    val ret = f
-    println("time: "+(System.nanoTime-s)/1e6+"ms")
-    ret
-  }
 }
 
 /**
