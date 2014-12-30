@@ -16,14 +16,13 @@ case class TurnMaker(bot: Option[Bot], cell: Option[Cell]) {
   /**
    * Получаем ход, валидируем его и выполняем и возвращаем пустой TurnMaker.
    * Если была ошибка - возвращаем TurnMaker с установленым ботом  */
-   //todo print exception if disqualify
    def paint(turn: (Bot)=> Turn): TurnMaker = this take turn map validate map perform getOrElse bad
 
   /* Если результатом paint возвращен TurnMaker с ботом - выполняем alternative, иначе ничего не делаем  */
   def or(alternative: Bot => Unit):   TurnMaker = { bot  foreach alternative; this }
-  def send(optional: (Cell) => Unit): TurnMaker = { cell foreach optional;    this}
-
   private def take(turn: (Bot)=> Turn): Try[Turn] = Try(bot map turn get)
+
+  def send(optional: (Cell) => Unit): TurnMaker = { cell foreach optional;    this}
   private def validate(turn: Turn): Turn = if (turn.validate) turn else exception
   private def perform(turn: Turn): TurnMaker = {
     val cell: CellImpl = turn.cell.asInstanceOf[CellImpl]
@@ -48,6 +47,7 @@ class Bots{
 
   def players: Seq[Bot] = bots filter isActive toSeq
   def all: Seq[Bot] = bots toSeq
+  def dead: Seq[Bot] = losers toSeq
   def foreach(turn: (Bot) => Unit) = players foreach turn
   def forall(turn: (Bot) => Unit)  = all foreach turn
 }

@@ -77,7 +77,7 @@ case class Turn(bot: Bot, cell: Cell){
   /* ячейка пуста */
   protected def isBlank: Boolean = cell.isEmpty && alien == 0
   /* ячейка пуста и есть как минимум 2х соседних своих ячеек */
-  protected def canFill: Boolean = isBlank && my > 1
+  protected def canFill: Boolean = cell.isEmpty && my > 1
   /* есть как минимум 3х соседних своих ячеек  */
   protected def canOver: Boolean = !cell.whose.contains(bot) && my > 2
 

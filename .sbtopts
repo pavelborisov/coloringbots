@@ -1,0 +1,7 @@
+-J-XX:+UseConcMarkSweepGC
+-J-XX:+CMSClassUnloadingEnabled
+-J-Xss2M
+-J-Xmx8G
+-Duser.timezone=GMT
+-jvm-debug 5007
+-J-Dhttp.port=8100
