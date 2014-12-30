@@ -1,4 +1,6 @@
-package coloringbots
+package coloringbots.bots
+
+import coloringbots.{Bot, Cell, Field, Turn}
 
 import scala.util.Random
 

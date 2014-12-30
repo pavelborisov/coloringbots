@@ -1,6 +1,6 @@
-package coloringbots
+package coloringbots.bots
 
-import scala.util.Random
+import coloringbots.{Bot, Cell, Field, Turn}
 
 /**
  * Created by IntelliJ IDEA.
