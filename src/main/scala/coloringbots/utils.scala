@@ -20,9 +20,9 @@ case class TurnMaker(bot: Option[Bot], cell: Option[Cell]) {
 
   /* Если результатом paint возвращен TurnMaker с ботом - выполняем alternative, иначе ничего не делаем  */
   def or(alternative: Bot => Unit):   TurnMaker = { bot  foreach alternative; this }
-  def send(optional: (Cell) => Unit): TurnMaker = { cell foreach optional;    this}
-
   private def take(turn: (Bot)=> Turn): Try[Turn] = Try(bot map turn get)
+
+  def send(optional: (Cell) => Unit): TurnMaker = { cell foreach optional;    this}
   private def validate(turn: Turn): Turn = if (turn.validate) turn else exception
   private def perform(turn: Turn): TurnMaker = {
     val cell: CellImpl = turn.cell.asInstanceOf[CellImpl]

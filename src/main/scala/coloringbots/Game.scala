@@ -48,14 +48,13 @@ class Round(val bots: Bots){
   /* Делает ходы всех ботов по разу */
   def run(i: Int)    = bots foreach turn
   /* Выполняет ход бота. Если ход с ошибкой или некорректный - дисквалификация бота */
-  def turn(bot: Bot) = {
+  def turn(bot: Bot): Unit = {
     // вся красивость реализована в объекте TurnMaker
     bot paint cell send notify or disqualify
-
   }
 
   /* Дисквалификация бота */
-  private def disqualify(bot: Bot) = {bots disqualify bot; None}
+  private def disqualify(bot: Bot): Unit = {bots disqualify bot; None}
   /* Ячейка представляется объектом ход */
   private def cell(bot: Bot): Turn = bot.nextTurn
   private def notify(cell: Cell): Unit = bots.forall(_.notify(cell))
