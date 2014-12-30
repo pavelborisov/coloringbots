@@ -18,7 +18,7 @@ import scala.util.Random
 case class SeqBotV2(val color: String) extends Bot{
 
   val random = new Random
-  var cellMove = List[Cell]()
+  var cellMove = new collection.mutable.ArrayStack[Cell]()
 
   lazy val init = {
     var x:Int = 0
@@ -29,23 +29,21 @@ case class SeqBotV2(val color: String) extends Bot{
       y = random.nextInt(field.size.y + 1)
     } while( !field.get( Coord(x,y) ).get.isEmpty )
 
-    cellMove = field.get( Coord(x,y) ).get :: cellMove
+    cellMove.push( field.get( Coord(x,y) ).get )
   }
 
   override def nextTurn: Turn = {
     init
 
-    cellMove.foreach (
-    ({ last_cell:Cell =>
-      List( last_cell.up, last_cell.down, last_cell.left, last_cell.right).foreach(
-        ({ cell:Option[Cell] => if( cell.isDefined && cell.get.isEmpty ) {
-            cellMove = cell.get :: cellMove
-            val turn = Turn(this, cell.get)
-            if (turn.validate)
-              return turn
-          }
-        }) (_)
-      ) }) (_) )
+    cellMove.foreach { last_cell =>
+      last_cell.neighbours.foreach { cell =>
+        val turn = Turn(this, cell)
+        if (turn.validate) {
+          cellMove.push(cell)
+          return turn
+        }
+      }
+    }
 
     this->(0,0)
   }
