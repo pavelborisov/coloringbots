@@ -77,6 +77,8 @@ case class Game (size: Coord, rounds: Int) {
   /* запуск игры */
   def play = {
     1 to rounds foreach round
+    println(s"${bots.players} are still alive")
+    println(s"${bots.dead} was dead")
     this
   }
 

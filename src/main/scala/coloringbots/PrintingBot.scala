@@ -12,17 +12,26 @@ import scala.collection.immutable.IndexedSeq
  */
 class PrintingBot extends Bot
 {
-  override def notify(cell: Cell): Unit = this print field
+  override def notify(cell: Cell): Unit = this print cell
   override def nextTurn: Turn = throw new UnsupportedOperationException()
   override def color: String = "printer"
   override var field: Field = null
 
-  private def print(field: Field): Unit = {
+  private def print(cell: Cell): Unit = {
     (0 to field.size.y).reverse.foreach{y=>
-      (0 to field.size.x).map(x => (x, y).whose).foreach(print)
+      (0 to field.size.x).map(x => (x, y)).foreach(c => print(char(c, cell)))
       println()
     }
   }
 
-  private def print(bot: Option[Bot]): Unit = Predef.print(bot.map(_.color(0)).getOrElse("_") + "\t")
+  private def print(c: Char): Unit = Predef.print(c + "\t")
+  private def char(i: Cell, cell: Cell): Char = {
+    color(i).map(c =>
+      if (i.coord == cell.coord)
+        c.toUpperCase
+      else
+        c.toLowerCase)
+      .getOrElse("_")(0)
+  }
+  private def color(i: Cell): Option[String] = i.whose.map(_.color)
 }

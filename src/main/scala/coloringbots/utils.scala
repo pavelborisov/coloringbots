@@ -48,6 +48,7 @@ class Bots{
 
   def players: Seq[Bot] = bots filter isActive toSeq
   def all: Seq[Bot] = bots toSeq
+  def dead: Seq[Bot] = losers toSeq
   def foreach(turn: (Bot) => Unit) = players foreach turn
   def forall(turn: (Bot) => Unit)  = all foreach turn
 }

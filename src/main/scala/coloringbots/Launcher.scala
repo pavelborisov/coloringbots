@@ -6,7 +6,7 @@ package coloringbots
  * Time: 16:29
  */
 object Launcher extends App{
-  Game(Coord(5, 6), 10)
+  Game(Coord(5, 6), 15)
     .register(RandomBot("blue"))
     .register(RandomBot("red"))
     .register(RandomBot("green"))
