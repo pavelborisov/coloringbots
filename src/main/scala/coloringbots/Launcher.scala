@@ -8,8 +8,8 @@ import coloringbots.bots.{ImmortalBot, SeqBotV2, SeqBot, RandomBot}
  * Time: 16:29
  */
 object Launcher extends App{
-  private val timer: TimeZombi = new TimeZombi
-  Game(Coord(5, 6), 35)
+  private val timer = new TimeZombi
+  Game(Coord(9, 9), 50)
     .register(ImmortalBot("blue"))
     .register(RandomBot("red"))
     .register(RandomBot("green"))
