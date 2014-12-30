@@ -32,20 +32,39 @@ case class SeqBotV2(val color: String) extends Bot{
     cellMove.push( field.get( Coord(x,y) ).get )
   }
 
+  type cellop = ()=>Option[Cell]
+  def cells(cell:Cell):List[cellop] = {
+    val c = cell.coord
+    List[cellop](
+      { () => cell.up },
+      { () => cell.down },
+      { () => cell.right },
+      { () => cell.left },
+      { () => field.get( Coord(c.x+1,c.y+1) ) },
+      { () => field.get( Coord(c.x+1,c.y-1) ) },
+      { () => field.get( Coord(c.x-1,c.y+1) ) },
+      { () => field.get( Coord(c.x-1,c.y-1) ) })
+  }
+
   override def nextTurn: Turn = {
     init
 
-    cellMove.foreach { last_cell =>
-      last_cell.neighbours.foreach { cell =>
-        val turn = Turn(this, cell)
-        if (turn.validate) {
-          cellMove.push(cell)
-          return turn
+    cellMove.foreach ( cells(_).foreach { fcell =>
+    //cellMove.foreach { last_cell =>
+    //  last_cell.neighbours.foreach { cell =>
+        val cellopt = fcell()
+        if( !cellopt.isEmpty ) {
+          val cell = cellopt.get
+          val turn = Turn(this, cell)
+          if (turn.validate) {
+            cellMove.push(cell)
+            return turn
+          }
         }
-      }
-    }
+      } )
+    //}
 
-    this->(0,0)
+    throw new Exception("No more turn!!!")
   }
 
   override def notify(cell: Cell) = {}
