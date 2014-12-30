@@ -1,5 +1,7 @@
 package coloringbots
 
+import coloringbots.bots._
+
 /**
  * User: rgordeev
  * Date: 19.12.14
@@ -7,9 +9,12 @@ package coloringbots
  */
 object Launcher extends App{
   Game(Coord(5, 6), 15)
-    .register(RandomBot("blue"))
+    .register(ImmortalBot("blue"))
+    .register(ImmortalBot("white"))
     .register(RandomBot("red"))
     .register(RandomBot("green"))
     .register(SeqBot("yellow"))
-    .register(new PrintingBot).play
+    .register(SeqBotV2("orange"))
+    .register(new PrintingBot)
+    .play
 }
