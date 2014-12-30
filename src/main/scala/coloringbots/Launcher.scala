@@ -1,6 +1,6 @@
 package coloringbots
 
-import coloringbots.bots.{SeqBotV2, SeqBot, RandomBot}
+import coloringbots.bots.{ImmortalBot, SeqBotV2, SeqBot, RandomBot}
 
 /**
  * User: rgordeev
@@ -9,15 +9,14 @@ import coloringbots.bots.{SeqBotV2, SeqBot, RandomBot}
  */
 object Launcher extends App{
   Game(Coord(5, 6), 10)
-    .register(RandomBot("blue"))
+    .register(ImmortalBot("blue"))
     .register(RandomBot("red"))
     .register(RandomBot("green"))
     .register(SeqBot("yellow"))
     .register(SeqBotV2("orange"))
-    .register(ChampionBot("white"))
+    .register(ChampionBot("pink"))
     .register(PrintZombi)
     .register(timer)
     .play
-    .register(SeqBot("pink")).play
   println(timer)
 }
