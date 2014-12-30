@@ -1,6 +1,6 @@
-package coloringbots.bots
+package coloringbots
 
-import coloringbots.{Bot, Cell, Field, Turn}
+import scala.collection.immutable.IndexedSeq
 
 /**
  * Created by IntelliJ IDEA.
@@ -10,7 +10,7 @@ import coloringbots.{Bot, Cell, Field, Turn}
  * Since: 
  *
  */
-class PrintingBot extends Bot
+object PrintZombi extends Bot
 {
   override def notify(cell: Cell): Unit = this print cell
   override def nextTurn: Turn = throw new UnsupportedOperationException()

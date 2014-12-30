@@ -1,6 +1,6 @@
 package coloringbots
 
-import coloringbots.bots._
+import coloringbots.bots.{SeqBotV2, SeqBot, RandomBot, ImmortalBot}
 
 /**
  * User: rgordeev
@@ -8,13 +8,15 @@ import coloringbots.bots._
  * Time: 16:29
  */
 object Launcher extends App{
+  private val timer: TimeZombi = new TimeZombi
   Game(Coord(5, 6), 15)
     .register(ImmortalBot("blue"))
-    .register(ImmortalBot("white"))
     .register(RandomBot("red"))
     .register(RandomBot("green"))
     .register(SeqBot("yellow"))
     .register(SeqBotV2("orange"))
-    .register(new PrintingBot)
+    .register(PrintZombi)
+    .register(timer)
     .play
+  println(timer)
 }
