@@ -24,11 +24,13 @@ class TimeZombi extends Bot {
   }
 
 
-  def currentTime = new Date().getTime
+  def currentTime = System.nanoTime
 
-  override def toString: String = map.map{case(bot, time) => (bot, time)}.toString
+  override def toString: String = map.map{case(bot, time) => (bot, format(time))}.toString
 
   override var field: Field = null
   override def color: String = "time"
   override def nextTurn: Turn = throw new UnsupportedOperationException
+
+  private def format(time: Long): String = s"${time/1e6}  ms"
 }

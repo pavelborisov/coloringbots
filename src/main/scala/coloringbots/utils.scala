@@ -16,7 +16,6 @@ case class TurnMaker(bot: Option[Bot], cell: Option[Cell]) {
   /**
    * Получаем ход, валидируем его и выполняем и возвращаем пустой TurnMaker.
    * Если была ошибка - возвращаем TurnMaker с установленым ботом  */
-   //todo print exception if disqualify
    def paint(turn: (Bot)=> Turn): TurnMaker = this take turn map validate map perform getOrElse bad
 
   /* Если результатом paint возвращен TurnMaker с ботом - выполняем alternative, иначе ничего не делаем  */

@@ -15,7 +15,6 @@ import scala.util.Random
 case class RandomBot(val color: String) extends Bot{
   val random = new Random
 
-  //todo
   override def nextTurn: Turn = 1 to 20 map turn find validate get
 
   override def notify(cell: Cell) = {}

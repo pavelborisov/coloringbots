@@ -66,7 +66,6 @@ class Round(val bots: Bots){
  * @param size   - размер поля
  * @param rounds - количество раундов
  */
-//todo define a winner
 case class Game (size: Coord, rounds: Int) {
   private val field = FieldImpl(size)
   private val bots = new Bots
