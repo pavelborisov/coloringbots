@@ -75,14 +75,14 @@ case class Turn(bot: Bot, cell: Cell){
   def canPaint = isBlank || canFill || canOver
 
   /* ячейка пуста */
-  protected def isBlank: Boolean = cell.isEmpty && alien == 0
+  def isBlank: Boolean = cell.isEmpty && alien == 0
   /* ячейка пуста и есть как минимум 2х соседних своих ячеек */
-  protected def canFill: Boolean = cell.isEmpty && my > 1
+  def canFill: Boolean = cell.isEmpty && my > 1
   /* есть как минимум 3х соседних своих ячеек  */
-  protected def canOver: Boolean = !cell.whose.contains(bot) && my > 2
+  def canOver: Boolean = !cell.whose.contains(bot) && my > 2
 
-  private def alien = cell.neighbours.count(_.whose.exists(_ != bot))
-  private def my = cell.neighbours.count(_.whose.contains(bot))
+  def alien = cell.neighbours.count(_.whose.exists(_ != bot))
+  def my = cell.neighbours.count(_.whose.contains(bot))
   override def toString: String = s"$bot -> (${cell.coord.x}, ${cell.coord.y}})"
 }
 

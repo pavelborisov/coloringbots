@@ -1,6 +1,6 @@
 package coloringbots
 
-import coloringbots.bots.{ImmortalBot, SeqBotV2, SeqBot, RandomBot}
+import coloringbots.bots._
 
 /**
  * User: rgordeev
@@ -16,6 +16,7 @@ object Launcher extends App{
     .register(SeqBot("yellow"))
     .register(SeqBotV2("orange"))
     .register(ChampionBot("pink"))
+    .register(ClanBot("magenta"))
     .register(PrintZombi)
     .register(timer)
     .play

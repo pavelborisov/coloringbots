@@ -1,4 +1,6 @@
-package coloringbots
+package coloringbots.bots
+
+import coloringbots.{Field, Cell, Turn, Bot}
 
 /**
  * Created by azimka on 30.12.14.

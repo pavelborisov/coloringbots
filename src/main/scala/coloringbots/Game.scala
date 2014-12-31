@@ -23,8 +23,8 @@ case class CellImpl (override val coord: Coord, override val field: Field) exten
   override def whose   = bot
   override def left  = get(x - 1, y    )
   override def right = get(x + 1, y    )
-  override def up    = get(x    , y - 1)
-  override def down  = get(x    , y + 1)
+  override def up    = get(x    , y + 1)
+  override def down  = get(x    , y - 1)
   override def neighbours: Set[Cell] = N + up.left + up + up.right + left + right + down.left + down + down.right
 
   def set(bot: Bot): Boolean = { this.bot = Some(bot); println(s"$coord marked ${bot.color}"); true }
