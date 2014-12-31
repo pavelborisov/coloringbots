@@ -12,9 +12,8 @@ import scala.util.{Try, Random}
  * Since: 
  *
  */
-case class ClanBot (override val color: String) extends Bot {
+case class ClanBot (override val color: String) extends RandomBotBase {
   implicit def cell2tuple(cell: Cell): (Int, Int) = (cell.coord.x, cell.coord.y)
-  private val r = new Random
   private var lasts = List[Turn]()
 
   override def nextTurn: Turn = {
@@ -53,10 +52,7 @@ case class ClanBot (override val color: String) extends Bot {
 
   private def validate(turn: Option[Turn], n: Int): Boolean = turn.isDefined && turn.get.validate && turn.get.my >= n
 
-  private def random: (Int, Int) = (r.nextInt(field.size.x - 3) + 2, r.nextInt(field.size.y - 3) + 2)
   private def randomTurn: Turn = 1 to 20 map turn find validate get
-  private def validate(turn: Turn) = turn.validate
-  private def turn(i: Int): Turn = this -> random
   private def save(turn: Turn): Turn = {lasts = turn :: lasts; turn}
 
 

@@ -1,4 +1,6 @@
-package coloringbots
+package coloringbots.bots
+
+import coloringbots.{Bot, Cell, Field, Turn}
 
 case class XoBot(val color: String) extends Bot {
 
