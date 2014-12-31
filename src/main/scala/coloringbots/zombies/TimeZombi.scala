@@ -1,6 +1,6 @@
-package coloringbots
+package coloringbots.zombies
 
-import java.util.Date
+import coloringbots.{Bot, Cell, Field, Turn}
 
 import scala.collection.mutable
 
