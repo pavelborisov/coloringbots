@@ -18,14 +18,14 @@ case class ClanBot (override val color: String) extends Bot {
   private var lasts = List[Turn]()
 
   override def nextTurn: Turn = {
-    var i: Int = Math.max(lasts.length, 3)
+    var i: Int = Math.min(lasts.length, 3)
 
     var turn: Option[Turn] = None
     while (i > 0 && turn.isEmpty){
       turn = findNeighbour(i)
       i = i - 1
     }
-    turn.getOrElse(save(randomTurn))
+    save(turn.getOrElse(randomTurn))
   }
 
   private def findNeighbour(n: Int): Option[Turn] = {
