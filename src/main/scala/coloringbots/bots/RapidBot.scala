@@ -51,7 +51,7 @@ case class RapidBot(val color: String) extends Bot {
 
   override def notify(cell: Cell) = {
     traverse( cell )
-    cell.neighbours.foreach( traverse _ )
+    cell.neighbours.foreach(traverse)
 
     def traverse(cell:Cell) = {
       if ( !cell.whose.contains(this) ) {

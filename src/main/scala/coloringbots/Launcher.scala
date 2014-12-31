@@ -22,5 +22,5 @@ object Launcher extends App{
     .register(PrintZombi)
     .register(timer)
     .play
-  println(timer)
+  timer.print
 }

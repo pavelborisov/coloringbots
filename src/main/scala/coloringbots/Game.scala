@@ -44,14 +44,16 @@ case class FieldImpl(override val size: Coord) extends Field{
 }
 
 /* Объект Раунд */
-class Round(val bots: Bots){
+class Round(val bots: Bots, timer: Timer){
   /* Делает ходы всех ботов по разу */
-  def run(i: Int)    = bots foreach turn
+  def run(i: Int) = bots foreach turnAndTime
   /* Выполняет ход бота. Если ход с ошибкой или некорректный - дисквалификация бота */
   def turn(bot: Bot): Unit = {
     // вся красивость реализована в объекте TurnMaker
     bot paint cell send notify or disqualify
   }
+
+  def turnAndTime(bot: Bot) = timer action(bot, turn)
 
   /* Дисквалификация бота */
   private def disqualify(bot: Bot): Unit = {bots disqualify bot; None}
@@ -68,6 +70,8 @@ class Round(val bots: Bots){
 case class Game (size: Coord, rounds: Int) {
   private val field = FieldImpl(size)
   private val bots = new Bots
+  private val timer = new Timer
+
 
   /* регистрация бота */
   def register(bot: Bot) = { bots register bot; bot.field = field; this }
@@ -76,7 +80,7 @@ case class Game (size: Coord, rounds: Int) {
   def play = {
     1 to rounds foreach round
     println(s"${bots.players} are still alive")
-    println(s"${bots.dead} was dead")
+//    println(s"${bots.dead} was dead")
     this
   }
 
@@ -84,7 +88,8 @@ case class Game (size: Coord, rounds: Int) {
   private def round(i: Int) = {
     println(s"round $i")
     println(s"${bots.players} are ready to fight")
-    bots run i
+    new Round(bots, timer).run(i)
+    println(timer)
   }
 }
 

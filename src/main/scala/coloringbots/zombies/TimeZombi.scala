@@ -26,7 +26,7 @@ class TimeZombi extends Bot {
 
   def currentTime = System.nanoTime
 
-  override def toString: String = map.map{case(bot, time) => (bot, format(time))}.toString
+  def print = println(map.map{case(bot, time) => (bot, format(time))})
 
   override var field: Field = null
   override def color: String = "time"
