@@ -9,7 +9,7 @@ import coloringbots.bots._
  */
 object Launcher extends App{
   private val timer = new TimeZombi
-  Game(Coord(9, 9), 10)
+  Game(Coord(9, 9), 50)
     .register(ImmortalBot("blue"))
     .register(RandomBot("red"))
     .register(RandomBot("green"))
@@ -17,6 +17,7 @@ object Launcher extends App{
     .register(SeqBotV2("orange"))
     .register(ChampionBot("pink"))
     .register(RapidBot("white"))
+    .register(ClanBot("magenta"))
     .register(PrintZombi)
     .register(timer)
     .play
