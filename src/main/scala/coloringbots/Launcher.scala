@@ -19,6 +19,7 @@ object Launcher extends App{
     .register(RapidBot("white"))
     .register(ClanBot("magenta"))
     .register(BotBegemot("dart"))
+    .register(XoBot("xcolor"))
     .register(PrintZombi)
     .register(timer)
     .play
