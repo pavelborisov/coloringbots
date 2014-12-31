@@ -18,7 +18,7 @@ case class ClanBot (override val color: String) extends Bot {
   private var lasts = List[Turn]()
 
   override def nextTurn: Turn = {
-    var i: Int = Math.min(lasts.length, 3)
+    var i: Int = Math.min(lasts.length, 2)
 
     var turn: Option[Turn] = None
     while (i > 0 && turn.isEmpty){

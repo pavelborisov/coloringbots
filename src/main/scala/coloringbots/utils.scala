@@ -52,6 +52,20 @@ class Bots{
   def forall(turn: (Bot) => Unit)  = all foreach turn
 }
 
+class Timer{
+  private val map = new mutable.HashMap[Bot, Long]()
+
+  def action(bot: Bot, f: Bot=>Unit) = {
+    val start = System.nanoTime
+    f(bot)
+    map(bot) = map.getOrElse(bot, 0L) + System.nanoTime - start
+  }
+
+  override def toString: String = "Timer: " + map.map{case(bot, time) => (bot, format(time))}.toString
+
+  private def format(time: Long): String = s"${time/1e6}  ms"
+}
+
 /* Данный объект создан для поддержки синтаксиса, используемого в методе CellImpl.neighbours */
 case class Neighbours(private val set: Set[Cell]){
   def +(f: => Cell): Neighbours = Try(f).toOption.fold(this){c =>Neighbours(set + c)}
@@ -60,7 +74,7 @@ case class Neighbours(private val set: Set[Cell]){
 
 /* неявные преобразования */
 object Utils {
-  implicit def bots2Round(bots: Bots): Round = new Round(bots)
+//  implicit def bots2Round(bots: Bots): Round = new Round(bots)
   implicit def bot2TurnMaker(bot: Bot):TurnMaker = TurnMaker(Some(bot), None)
   implicit def option2Cell(o: Option[Cell]): Cell = o.get
   implicit def neighbours2Set(n: Neighbours): Set[Cell] = n.toSet

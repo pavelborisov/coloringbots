@@ -68,9 +68,8 @@ case class RapidBot(val color: String) extends Bot {
       .map { case(x,y) => field.get( Coord(x,y) ).get }
       .foreach( traverse _ )
 
-    //traverse( cell )
     def traverse(cell:Cell) = {
-      //if ( !cell.whose.contains(this) ) {
+      if ( !cell.whose.contains(this) ) {
         val turn = Turn(this, cell)
         val c = (cell.coord.x, cell.coord.y)
         if( turn.validate ) {
@@ -79,7 +78,6 @@ case class RapidBot(val color: String) extends Bot {
         }
         else
           cellMap -= (c)
-      //}
     }
   }
 
