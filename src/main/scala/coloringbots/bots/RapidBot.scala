@@ -19,7 +19,7 @@ case class RapidBot(val color: String) extends Bot {
       var j:Int = 0
       while( j < field.size.y ) {
         field.get(Coord(i, j)) match {
-          case Some(cell) if cell.isEmpty =>
+          case Some(cell) if cell.isEmpty && cell.neighbours.count(_.whose.exists(_ != this)) == 0 =>
             cellMap += ((i, j))
           case _ =>
         }
@@ -32,7 +32,10 @@ case class RapidBot(val color: String) extends Bot {
   override def nextTurn: Turn = {
     if( cellMap.isEmpty) init
 
+    val idx = random.nextInt( cellMap.size )
     val (x:Int,y:Int) = cellMap( random.nextInt( cellMap.size ) )
+
+    cellMap.remove( idx )
 
     val t = this -> (x,y)
     if( !t.validate )
@@ -50,15 +53,33 @@ case class RapidBot(val color: String) extends Bot {
   }
 
   override def notify(cell: Cell) = {
-    traverse( cell )
-    cell.neighbours.foreach( traverse _ )
+    val c = cell.coord
+    List(
+      ( c.x + 1, c.y + 1),
+      ( c.x - 1, c.y + 1),
+      ( c.x + 1, c.y - 1),
+      ( c.x - 1, c.y - 1),
+      ( c.x + 1, c.y ),
+      ( c.x - 1, c.y ),
+      ( c.x, c.y + 1 ),
+      ( c.x, c.y - 1),
+      (c.x, c.y))
+      .withFilter { case(x,y) => x >= 0 && x < field.size.x && y >= 0 && y < field.size.y }
+      .map { case(x,y) => field.get( Coord(x,y) ).get }
+      .foreach( traverse _ )
 
+    //traverse( cell )
     def traverse(cell:Cell) = {
-      if ( !cell.whose.contains(this) ) {
+      //if ( !cell.whose.contains(this) ) {
         val turn = Turn(this, cell)
-        if (turn.validate)
-          cellMap += ((cell.coord.x, cell.coord.y))
-      }
+        val c = (cell.coord.x, cell.coord.y)
+        if( turn.validate ) {
+          if (!cellMap.contains(c))
+            cellMap += (c)
+        }
+        else
+          cellMap -= (c)
+      //}
     }
   }
 
