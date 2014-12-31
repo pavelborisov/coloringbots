@@ -17,6 +17,7 @@ object Launcher extends App{
     .register(SeqBotV2("orange"))
     .register(ChampionBot("pink"))
     .register(ClanBot("magenta"))
+    .register(BotBegemot("begemot"))
     .register(PrintZombi)
     .register(timer)
     .play
