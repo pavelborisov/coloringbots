@@ -66,8 +66,8 @@ case class SeqBotV2(val color: String) extends Bot{
          val (x,y) = coord( last_cell.coord );
          val key = { x * 1000 + y  }
          if( !cash.contains(key) &&
-           x > 0 && x < field.size.x &&
-           y > 0 && y < field.size.y )
+           x >= 0 && x < field.size.x &&
+           y >= 0 && y < field.size.y )
          {
            val cell = field.get(Coord(x, y)).get
            val turn = Turn(this, cell)
