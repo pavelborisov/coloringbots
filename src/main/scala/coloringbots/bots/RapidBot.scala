@@ -40,7 +40,7 @@ case class RapidBot(val color: String) extends Bot {
     val t = this -> (x,y)
     if( !t.validate )
     {
-      (0 to field.size.y).foreach {y=>
+      ( 0 to field.size.y).foreach {y=>
         (0 to field.size.x).foreach{ x =>
           val t: Turn = this ->(x, y)
           if (t.validate)

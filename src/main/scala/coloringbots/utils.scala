@@ -1,5 +1,8 @@
 package coloringbots
 
+import org.aop4scala._
+import org.aspectj.weaver.tools.PointcutExpression
+
 import scala.collection.mutable
 import scala.util.Try
 
@@ -33,6 +36,30 @@ case class TurnMaker(bot: Option[Bot], cell: Option[Cell]) {
   private def exception = throw new IllegalStateException("Некорректный ход у бота " + bot)
 }
 
+abstract trait TimeingInterceptor extends Interceptor
+{
+  var time:mutable.HashMap[Bot, Long] = mutable.HashMap.empty[Bot, Long]
+
+  abstract override def invoke(invocation: Invocation): AnyRef = {
+    if (invocation.target.isInstanceOf[Bot] )
+    {
+      var startTime = System.nanoTime()
+      val result = super.invoke(invocation)
+      var endTime = System.nanoTime()
+
+      val bot = invocation.target.asInstanceOf[Bot]
+      time.put( bot, time.getOrElse(bot,0L) + (endTime - startTime))
+      //println( s"${bot} -> ${invocation.method.getName}:(${format(endTime - startTime)})")
+
+      result
+    } else
+      super.invoke(invocation)
+  }
+
+  override def toString: String = "Aspect Time:\n" + time.map{case(bot, time) => (bot, format(time))}.toString
+  private def format(time: Long): String = s"${time/1e6}  ms"
+}
+
 /**
  * Список ботов. Если в ходе выполнения бот совершает недопустимое действие, он дисквалифицируется
  */
@@ -41,15 +68,21 @@ class Bots{
   private val losers = new mutable.HashSet[Bot]
 
   private def isActive(bot: Bot) = !(losers contains bot)
+  def isFinish() = (bots -- losers).size == 1
 
-  def register(bot: Bot): Bots = { bots += bot; this }
-  def disqualify(bot: Bot) = losers += bot
+  val aspect = new Aspect("execution(* * (..))")
+    with TimeingInterceptor
+
+  def register(bot: Bot): Bots = { bots += aspect.create[Bot](bot); this }
+  def disqualify(bot: Bot) = { losers += bot }
 
   def players: Seq[Bot] = bots filter isActive toSeq
   def all: Seq[Bot] = bots toSeq
   def dead: Seq[Bot] = losers toSeq
   def foreach(turn: (Bot) => Unit) = players foreach turn
   def forall(turn: (Bot) => Unit)  = all foreach turn
+
+  override def toString: String = aspect.toString
 }
 
 class Timer{
@@ -58,7 +91,10 @@ class Timer{
   def action(bot: Bot, f: Bot=>Unit) = {
     val start = System.nanoTime
     f(bot)
-    map(bot) = map.getOrElse(bot, 0L) + System.nanoTime - start
+    val end = System.nanoTime
+    map.put( bot, map.getOrElse(bot, 0L) + end - start)
+
+    //println( s"${bot} -> action (${format(end - start)})")
   }
 
   override def toString: String = "Timer: " + map.map{case(bot, time) => (bot, format(time))}.toString

@@ -11,10 +11,10 @@ case class ImmortalBot(val color: String) extends Bot
   override def nextTurn: Turn = {
 
     var i = -1
-    while( i < field.size.y - 3)
+    while( i < field.size.y - 1)
     {
       var j = -1
-      while(j < field.size.x - 3)
+      while(j < field.size.x - 1)
       {
         if( validateStart( j, i ) ) {
           val move = this ->(j + 1, i + 1)
@@ -30,10 +30,10 @@ case class ImmortalBot(val color: String) extends Bot
     while( r > 0 )
     {
       var i = 0
-      while( i < field.size.y - 2)
+      while( i < field.size.y )
       {
         var j = 0
-        while(j < field.size.x - 2)
+        while(j < field.size.x)
         {
           field.get(Coord(j, i)).whose match {
             case Some(bot) if bot == this =>
@@ -52,8 +52,8 @@ case class ImmortalBot(val color: String) extends Bot
   }
 
   def validateStart( startX:Int, startY:Int):Boolean = {
-    (0 to 1).map( _ * 2 + startY).filter { y => y >= 0 && y < field.size.y }.find { y =>
-      ((0 to 1).map(_ * 2 + startX).filter { x => x >= 0 && x < field.size.x}.find { x =>
+    (0 to 1).map( _ * 2 + startY).filter { y => y >= 0 && y <= field.size.y }.find { y =>
+      ((0 to 1).map(_ * 2 + startX).filter { x => x >= 0 && x <= field.size.x}.find { x =>
         val t: Turn = this ->(x, y)
         !(t.validate)
       }) != None
@@ -65,8 +65,8 @@ case class ImmortalBot(val color: String) extends Bot
     List( (-radius + 1 to radius - 1).map(_ + centerY).map{ y => List( (centerX - radius, y), (centerX + radius, y) )}.flatten ,
       (-radius + 1 to radius - 1).map(_ + centerX).map{ x => List( (x, centerY - radius), (x, centerY + radius) )}.flatten )
       .flatten.find{ case(x,y) =>
-      { x >= 0 && x < field.size.x } &&
-        { y >= 0 && y < field.size.y } &&
+      { x >= 0 && x <= field.size.x } &&
+        { y >= 0 && y <= field.size.y } &&
         (this->(x,y)).validate }.map { case (x,y) => (this->(x,y)) }
   }
 

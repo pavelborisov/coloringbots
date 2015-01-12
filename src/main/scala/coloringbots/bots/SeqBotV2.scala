@@ -35,13 +35,24 @@ case class SeqBotV2(val color: String) extends Bot{
   type cellop = (Coord)=>(Int,Int)
   val cells:List[cellop] = {
     List[cellop](
-/*      { c:Coord => ( c.x + 2, c.y + 1) },
-      { c:Coord => ( c.x + 2, c.y) },
+      { c:Coord => ( c.x + 3, c.y + 3) },
+      { c:Coord => ( c.x - 3, c.y + 3) },
+      { c:Coord => ( c.x + 3, c.y - 3) },
+      { c:Coord => ( c.x - 3, c.y - 3) },
+
+      { c:Coord => ( c.x + 1, c.y + 2) },
+      //{ c:Coord => ( c.x, c.y + 2) },
+      { c:Coord => ( c.x - 1, c.y + 2) },
+      { c:Coord => ( c.x + 1, c.y - 2) },
+      //{ c:Coord => ( c.x, c.y - 2) },
+      { c:Coord => ( c.x - 1, c.y - 2) },
+      { c:Coord => ( c.x + 2, c.y + 1) },
+      //{ c:Coord => ( c.x + 2, c.y) },
       { c:Coord => ( c.x + 2, c.y - 1) },
       { c:Coord => ( c.x - 2, c.y + 1) },
-      { c:Coord => ( c.x - 2, c.y) },
+      //{ c:Coord => ( c.x - 2, c.y) },
       { c:Coord => ( c.x - 2, c.y - 1) },
-*/
+
       { c:Coord => ( c.x + 1, c.y + 1) },
       { c:Coord => ( c.x - 1, c.y + 1) },
       { c:Coord => ( c.x + 1, c.y - 1) },
@@ -66,8 +77,8 @@ case class SeqBotV2(val color: String) extends Bot{
          val (x,y) = coord( last_cell.coord );
          val key = { x * 1000 + y  }
          if( !cash.contains(key) &&
-           x >= 0 && x < field.size.x &&
-           y >= 0 && y < field.size.y )
+           x >= 0 && x <= field.size.x &&
+           y >= 0 && y <= field.size.y )
          {
            val cell = field.get(Coord(x, y)).get
            val turn = Turn(this, cell)
@@ -82,8 +93,8 @@ case class SeqBotV2(val color: String) extends Bot{
     }
 
     // check another move
-    (0 to field.size.y).foreach {y=>
-      (0 to field.size.x).foreach{ x =>
+    (field.size.y to 0 by -1).foreach {y=>
+      (field.size.x to 0 by -1).foreach{ x =>
         val t: Turn = this ->(x, y)
         if (t.validate)
           return t

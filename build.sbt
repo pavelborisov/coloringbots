@@ -7,7 +7,8 @@ version := "0.0.1-SNAPSHOT"
 organization := "ru.naumen"
 
 libraryDependencies ++= Seq(
-  "junit" % "junit" % "4.10",
-  "org.scalatest" % "scalatest_2.11" % "2.2.1" % "test"
+  "junit"                   % "junit"                 % "4.10",
+  "org.scalatest"           % "scalatest_2.11"        % "2.2.1" % "test",
+  "aspectj"                 % "aspectjweaver"         % "1.5.4",
+  "aspectj"                 % "aspectjrt"             % "1.5.4"
 )
-

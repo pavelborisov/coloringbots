@@ -53,7 +53,7 @@ class Round(val bots: Bots, timer: Timer){
     bot paint cell send notify or disqualify
   }
 
-  def turnAndTime(bot: Bot) = timer action(bot, turn)
+  def turnAndTime(bot: Bot):Unit = timer action(bot, turn)
 
   /* Дисквалификация бота */
   private def disqualify(bot: Bot): Unit = {bots disqualify bot; None}
@@ -78,18 +78,28 @@ case class Game (size: Coord, rounds: Int) {
 
   /* запуск игры */
   def play = {
-    1 to rounds foreach round
+    import scala.util.control.Breaks._
+
+    breakable {
+      1 to rounds foreach { i =>
+        round(i)
+
+        if( bots.isFinish() )
+          break;
+      }
+    }
+
     println(s"${bots.players} are still alive")
-//    println(s"${bots.dead} was dead")
+    println( bots )
     this
   }
 
   /* Выполняет i-й раунд */
   private def round(i: Int) = {
     println(s"round $i")
-    println(s"${bots.players} are ready to fight")
+    //println(s"${bots.players} are ready to fight")
     new Round(bots, timer).run(i)
-    println(timer)
+    //println(timer)
   }
 }
 

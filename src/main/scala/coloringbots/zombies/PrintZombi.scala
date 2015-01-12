@@ -30,7 +30,7 @@ object PrintZombi extends Bot
     println(counter)
   }
 
-  private def print(c: Char): Unit = Predef.print(c + "\t")
+  private def print(c: Char): Unit = Predef.print( (if( c.isUpper ) "*"+c+"*" else c ) + "\t")
   private def char(i: Cell, cell: Cell, counter: Counter): Char = {
     i.whose.foreach(counter.inc)
 
@@ -49,5 +49,5 @@ class Counter {
 
   def inc(bot: Bot) = map(bot) = map.getOrElse(bot, 0) + 1
 
-  override def toString: String = map.toString
+  override def toString: String = map.toList.sortBy{ case (bot, i) => if (bot.color.equals("magenta")) "" else bot.color }.toString
 }
